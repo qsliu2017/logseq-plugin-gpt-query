@@ -10,11 +10,19 @@ const setting: SettingSchemaDesc[] = [
     "type": "string",
     "default": "",
     "description": "",
-  }, {
+  },
+  {
     "key": "model",
     "title": "Chat completion model",
     "type": "string",
     "default": "gpt-3.5-turbo",
+    "description": "",
+  },
+  {
+    "key": "maxAnswer",
+    "title": "Max Number of Answer",
+    "type": "number",
+    "default": "3",
     "description": "",
   },
 ];
@@ -34,11 +42,13 @@ function main() {
         messages: [...PRESET, { role: "user", content: content }],
       });
 
-      resp.data.choices.forEach((choice) => {
-        logseq.Editor.insertBlock(uuid, choice.message!.content)
-      })
+      resp.data.choices
+        .map(choice => choice.message!.content)
+        .filter((value, index, array) => array.indexOf(value) == index)
+        .filter((_, index) => index < logseq.settings!["maxAnswer"])
+        .forEach(msg => logseq.Editor.insertBlock(uuid, msg));
     },
-  )
+  );
 }
 
 // bootstrap

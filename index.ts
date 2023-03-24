@@ -1,6 +1,7 @@
 import "@logseq/libs";
 import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin";
-import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
+import { Configuration, OpenAIApi } from "openai";
+import { PRESET } from "./preset";
 
 const setting: SettingSchemaDesc[] = [
   {
@@ -18,8 +19,6 @@ const setting: SettingSchemaDesc[] = [
   },
 ];
 
-const preset: ChatCompletionRequestMessage[] = [];
-
 function main() {
   logseq.Editor.registerSlashCommand(
     'gpt-query',
@@ -32,7 +31,7 @@ function main() {
 
       const resp = await openai.createChatCompletion({
         model: logseq.settings!["model"],
-        messages: [...preset, { role: "user", content: content }],
+        messages: [...PRESET, { role: "user", content: content }],
       });
 
       resp.data.choices.forEach((choice) => {

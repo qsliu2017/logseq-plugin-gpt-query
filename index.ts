@@ -29,7 +29,7 @@ const setting: SettingSchemaDesc[] = [
 
 function main() {
   logseq.Editor.registerSlashCommand(
-    'gpt-query',
+    'query?',
     async () => {
       const { content, uuid } = (await logseq.Editor.getCurrentBlock())!;
 
